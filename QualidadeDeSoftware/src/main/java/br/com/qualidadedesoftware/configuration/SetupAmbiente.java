@@ -7,7 +7,7 @@ public class SetupAmbiente extends Suporte
 	public SetupAmbiente() {
 		removerArquivosAntigos(diretorioImagem, "png");
 		removerArquivosAntigos(diretorioPDF, "pdf");
-		removerArquivosAntigos(diretorioLog, "txt");
+		//removerArquivosAntigos(diretorioLog, "txt");
 	}
 	
 	public void removerArquivosAntigos(String diretorio, String tipoArquivo) {

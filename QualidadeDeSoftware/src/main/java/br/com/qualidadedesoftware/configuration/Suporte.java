@@ -19,10 +19,14 @@ public class Suporte extends SeleniumTestCase
 	protected static Date data = data = new Date();
 	protected static SimpleDateFormat spd = new SimpleDateFormat("dd MM yyyy hh mm ss ");
 	
+	// Configurações do teste
+	protected static String nomeCasoDeTeste = "";
+	protected static String descricaoCasoDeTeste = "";
+	
 	// Configações dos diretórios
 	protected static String diretorioProjeto = new File("pom.xml").getAbsolutePath().replace("pom.xml", "");
-	protected static String diretorioDatapool = diretorioProjeto + prop.getProperty("prop.file.datapool").replace(".", separator);
-	protected static String diretorioExcel = diretorioProjeto + prop.getProperty("prop.file.datapool").replace(".", separator);
+	protected static String diretorioDatapool = diretorioProjeto + prop.getProperty("prop.file.excel").replace(".", separator);
+	protected static String diretorioExcel = diretorioDatapool;
 	protected static String diretorioImagem = diretorioProjeto + prop.getProperty("prop.file.img").replace(".", separator);
 	protected static String diretorioPDF = diretorioProjeto + prop.getProperty("prop.file.pdf").replace(".", separator);
 	protected static String diretorioLog = diretorioProjeto + prop.getProperty("prop.file.logs").replace(".", separator);

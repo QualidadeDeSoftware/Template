@@ -3,6 +3,7 @@ package br.com.qualidadedesoftware.configuration;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Map;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -145,6 +146,10 @@ public class Excel extends Suporte {
 				return true;
 		}
 		return false;
+	}
+	
+    public void proximaLinha(Map<String, Excel> planilha, String aba) {
+    	planilha.get( aba ).setLinhaAtual(planilha.get( aba ).getLinhaAtual() + 1);
 	}
 	
 	// Carrega massa de dados a partir da planilha excel

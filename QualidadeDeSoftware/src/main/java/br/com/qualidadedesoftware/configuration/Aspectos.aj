@@ -11,7 +11,7 @@ public aspect Aspectos extends Suporte
 	// Print da tela por erro de dados atuais divergentes dos dados esperados
 	pointcut asserts(): call (public * assert*(..));
 	after() throwing (AssertionError e): asserts() {
-		captureScreenshot("ERRO assertEquals - ");
+		captureScreenshot("ERRO assert - ");
 		enviarRelatorio();
 	}
 
@@ -39,7 +39,7 @@ public aspect Aspectos extends Suporte
 	public String gerarPDF() {
 		String nomeCasodeTeste = diretorioExcel.substring(diretorioExcel.lastIndexOf(separator)).replace(separator, "").replace("_", " ").replace(".xls", "");
 		String descricao = planilhaExcel.get(abasDaPlanilha.get(0)).coluna("Descrição");
-		return new PDF().gerarPDF(nomeCasodeTeste, descricao);
+		return new PDF().gerarPDF();
 	}
 	
 	public void enviarRelatorio() {

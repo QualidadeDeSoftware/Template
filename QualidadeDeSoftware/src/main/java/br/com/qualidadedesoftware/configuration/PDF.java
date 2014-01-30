@@ -26,8 +26,8 @@ public class PDF extends Suporte {
 	OutputStream os = null;
 	String arquivoPDF = diretorioPDF + spd.format(data) + " - ";
 	
-	public String gerarPDF(String nomeCasodeTeste, String descricao) {
-		incluirNomeEDescricao(nomeCasodeTeste, descricao);
+	public String gerarPDF() {
+		incluirNomeEDescricao();
 		incluirLogs();
 		incluirImagens();
 		
@@ -45,22 +45,22 @@ public class PDF extends Suporte {
 		return arquivoPDF;
 	}
 
-	public void incluirNomeEDescricao(String nomeCasodeTeste, String descricao) {
+	public void incluirNomeEDescricao() {
 		try {
-			arquivoPDF += nomeCasodeTeste + ".pdf";
+			arquivoPDF += nomeCasoDeTeste + ".pdf";
 			doc = new Document(PageSize.A4);
 			os = new FileOutputStream(arquivoPDF);
 			PdfWriter.getInstance(doc, os);
 			doc.open();
 
 			Font f = new Font(FontFamily.COURIER, 20, Font.BOLD);
-			Paragraph p = new Paragraph(nomeCasodeTeste, f);
+			Paragraph p = new Paragraph(nomeCasoDeTeste, f);
 			p.setAlignment(Element.ALIGN_CENTER);
 			p.setSpacingAfter(3);
 			doc.add(p);
 
 			Font f2 = new Font(FontFamily.COURIER, 9, Font.NORMAL);
-			Paragraph p2 = new Paragraph(descricao, f2);
+			Paragraph p2 = new Paragraph(descricaoCasoDeTeste, f2);
 			p2.setAlignment(Element.ALIGN_CENTER);
 			p2.setSpacingAfter(30);
 			doc.add(p2);
