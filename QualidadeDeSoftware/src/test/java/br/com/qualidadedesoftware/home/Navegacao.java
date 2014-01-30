@@ -3,9 +3,9 @@ package br.com.qualidadedesoftware.home;
 import org.junit.Test;
 
 import br.com.qualidadedesoftware.configuration.Excel;
-import br.com.qualidadedesoftware.dsl.Commons_DSL;
+import br.com.qualidadedesoftware.configuration.Suporte;
 
-public class Navegacao extends Commons_DSL {
+public class Navegacao extends Suporte {
 	Excel excel = new Excel();
 	
 	public void preRequisito(String planilha) {
