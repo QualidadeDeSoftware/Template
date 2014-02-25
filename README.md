@@ -5,3 +5,5 @@ m2eclipse: Maven in Eclipse                            http://download.eclipse.o
 EGit:      Git in Eclipse                              http://download.eclipse.org/egit/updates
 
 AspectJ:   Aspect Oriented Programming in Eclipse      http://download.eclipse.org/tools/ajdt/43/update
+
+TestNG : Next Generation Java Testing                  http://beust.com/eclipse
