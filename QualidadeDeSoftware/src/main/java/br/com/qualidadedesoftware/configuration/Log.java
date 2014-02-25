@@ -10,7 +10,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class Log extends Suporte 
 {	
-    public void log4j() {
+    public void inicializarlog4j() {
 		token = spd.format(data);
     	PropertyConfigurator.configure("log4j.properties");
 		logger = Logger.getLogger("");
@@ -18,10 +18,15 @@ public class Log extends Suporte
 		logger.addAppender(createNewAppender());
 	}
     
+    public void finalizarLog4j() {
+    	logger.removeAppender(token);
+    	appender.close();
+    }
+    
     private static FileAppender createNewAppender() {
     	appender = new FileAppender();
         appender.setName(token);
-        appender.setLayout(new PatternLayout("%d{dd-MM-yyyy HH:mm:ss} - %F || %M || %L :: %m%n"));
+        appender.setLayout(new PatternLayout("%d{dd-MM-yyyy HH:mm:ss} - %F || %L :: %m%n"));
         appender.setFile(createTempFile().getAbsolutePath());
         appender.setAppend(true);
         appender.setThreshold(Level.INFO);
@@ -32,10 +37,10 @@ public class Log extends Suporte
     public static File createTempFile(){
     	File f = null;
         try{
-           f = File.createTempFile("tmp", ".txt", new File(diretorioLog));
+           f = File.createTempFile("log4j", ".txt", new File(diretorioLog));
            f.deleteOnExit();
         }catch(Exception e){
-        	logger.error(e.fillInStackTrace());
+        	System.out.println(e.fillInStackTrace());
         }
         return f;
     }

@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 
-public abstract class SeleniumTestCase extends TestCase 
+public abstract class SeleniumRC extends TestCase 
 {
 	protected Properties prop = new Propriedades().getProp();
 	protected static Selenium selenium;

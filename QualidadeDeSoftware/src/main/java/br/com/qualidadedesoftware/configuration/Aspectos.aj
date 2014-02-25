@@ -2,6 +2,9 @@ package br.com.qualidadedesoftware.configuration;
 
 public aspect Aspectos extends Suporte 
 {	
+	SetupAmbiente setup =  new SetupAmbiente();
+	Log log = new Log();
+	
 	// Print da tela após validações de dados com sucesso
 	pointcut screenshot(): call (public * validar*(..));
 	after() : screenshot() {
@@ -10,8 +13,11 @@ public aspect Aspectos extends Suporte
 	
 	// Print da tela por erro de dados atuais divergentes dos dados esperados
 	pointcut asserts(): call (public * assert*(..));
-	after() throwing (AssertionError e): asserts() {
-		captureScreenshot("ERRO assert - ");
+	after() throwing (Exception e): asserts() {
+		captureScreenshot("ERRO assertEquals - ");
+		if (e.fillInStackTrace().getMessage().contains("junit")) {
+			logger.info(e.fillInStackTrace().getMessage());	
+		}
 		enviarRelatorio();
 	}
 
@@ -21,31 +27,24 @@ public aspect Aspectos extends Suporte
 		captureScreenshot("ERRO fail - ");
 		enviarRelatorio();
 	}
-
-	// Inicializa o log4j no setup do Selenium
-	pointcut setup() : execution (* setUp());
-	before() : setup() {
-		new Log().log4j();
-		new SetupAmbiente();
+    
+	// Inicializa no setup do Selenium
+	pointcut inicializar() : execution (* setUp());
+	before() : inicializar() {
+		setup.startSeleniumServer();
+		setup.removerArquivosAntigos();
+		log.inicializarlog4j();
+		if (Boolean.parseBoolean(prop.getProperty("prop.bd.habilitar"))) {
+			bd.iniciarBancoDeDados();
+		}
 	}
 	
-	public void captureScreenshot(String msg) {
-		int count = 1;
-		selenium.captureEntirePageScreenshot(diretorioImagem + count
-				+ " - " + msg + spd.format(data) + ".png", "background=#FFFFFF");
-		count++;
-	}
-
-	public String gerarPDF() {
-		String nomeCasodeTeste = diretorioExcel.substring(diretorioExcel.lastIndexOf(separator)).replace(separator, "").replace("_", " ").replace(".xls", "");
-		String descricao = planilhaExcel.get(abasDaPlanilha.get(0)).coluna("Descrição");
-		return new PDF().gerarPDF();
-	}
-	
-	public void enviarRelatorio() {
-		String[] destinatarios = prop.getProperty("prop.email.destinatarios").split(",");
-		String assunto = prop.getProperty("prop.email.assunto");
-		String anexo = gerarPDF();
-		new Email().enviaEmail(destinatarios, assunto, anexo);
+	// Finaliza no setup do Selenium
+	pointcut finalizar() : execution (* tearDown());
+	before() : finalizar() {
+		log.finalizarLog4j();
+		if (Boolean.parseBoolean(prop.getProperty("prop.bd.habilitar"))) {
+			bd.encerrarBancoDeDados();
+		}
 	}
 }

@@ -38,10 +38,9 @@ public class PDF extends Suporte {
 			try {
 				os.close();
 			} catch (IOException e) {
-				logger.info(e.fillInStackTrace());
+				System.out.println(e.fillInStackTrace());
 			}
 		}
-		
 		return arquivoPDF;
 	}
 
@@ -65,7 +64,7 @@ public class PDF extends Suporte {
 			p2.setSpacingAfter(30);
 			doc.add(p2);
 		} catch (Exception e) {
-			logger.info(e.fillInStackTrace());
+			System.out.println(e.fillInStackTrace());
 		}
 	}
 	
@@ -88,12 +87,8 @@ public class PDF extends Suporte {
 			br.close();
 			if (!p2.isEmpty()) {
 				doc.add(p2);
-			}
-			logger.removeAppender(token);
-			appender.close();			
-		} catch (Exception e) {
-			logger.info(e.fillInStackTrace());
-		}
+			}			
+		} catch (Exception e) {}
 	}
 	
 	public void incluirImagens() {
@@ -113,7 +108,7 @@ public class PDF extends Suporte {
 				}
 			}
 		} catch (Exception e) {
-			logger.info(e.fillInStackTrace());
+			System.out.println(e.fillInStackTrace());
 		}
 	}
 

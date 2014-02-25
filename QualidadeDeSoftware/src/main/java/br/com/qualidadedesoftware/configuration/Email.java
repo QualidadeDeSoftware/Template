@@ -16,9 +16,6 @@ import javax.mail.internet.MimeMultipart;
 
 public class Email extends Suporte {
 	public void enviaEmail(String[] toAddress, String subject, String anexo) {
-		if (anexo.equalsIgnoreCase("") || anexo.isEmpty()) {
-			logger.error("Falta anexar o pdf");
-		}
 		try {
 			for (int i = 0; i < toAddress.length; i++) {
 				Properties props = new Properties();
@@ -48,21 +45,25 @@ public class Email extends Suporte {
 				// Texto que estará no corpo da mensagem
 				message.setText(subject);
 
-				// Anexa o pdf ao e-mail
-				MimeBodyPart mbp2 = new MimeBodyPart();
-				FileDataSource fds = new FileDataSource(anexo);
-				mbp2.setDataHandler(new DataHandler(fds));
-				mbp2.setFileName(fds.getName());
-				Multipart mp = new MimeMultipart();
-				mp.addBodyPart(mbp2);
-				message.setContent(mp);
+				if (!anexo.isEmpty()) {
+					// Anexa o pdf ao e-mail
+					MimeBodyPart mbp2 = new MimeBodyPart();
+					FileDataSource fds = new FileDataSource(anexo);
+					mbp2.setDataHandler(new DataHandler(fds));
+					mbp2.setFileName(fds.getName());
+					Multipart mp = new MimeMultipart();
+					mp.addBodyPart(mbp2);
+					message.setContent(mp);
+				}
 
 				// Envia o e-mail
-				Transport.send(message);
+				if (Boolean.parseBoolean(prop.getProperty("prop.email.habilitar.envio"))) {
+					Transport.send(message);
+					System.out.println("E-mail enviado com sucesso!");
+				}
 			}
 		} catch (Exception e) {
-			logger.error(e.fillInStackTrace());
+			System.out.println(e.fillInStackTrace());
 		}
-		logger.info("E-mail enviado com sucesso!");
 	}
 }

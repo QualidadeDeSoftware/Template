@@ -47,9 +47,9 @@ public class Excel extends Suporte {
 			fileXLS = new File(FILE_XLS);
 
 			if ("null".equalsIgnoreCase(FILE_XLS)) {
-				logger.error("Informe o diretório e o nome do arquivo .xls na variável \"FILE_XLS\". Exemplo: \"C:/datapool.xls\"");
+				System.out.println("Informe o diretório e o nome do arquivo .xls na variável \"FILE_XLS\". Exemplo: \"C:/datapool.xls\"");
 				if (fileXLS.exists()) {
-					logger.error("Não existe o arquivo .xml dentro do diretório informado!");
+					System.out.println("Não existe o arquivo .xml dentro do diretório informado!");
 				}
 			}
 
@@ -68,7 +68,7 @@ public class Excel extends Suporte {
 				}
 			}
 			if (contains) {
-				logger.error("Não existe a aba (" + abaPlanilha
+				System.out.println("Não existe a aba (" + abaPlanilha
 						+ ") no arquivo informado!");
 			}
 
@@ -85,7 +85,7 @@ public class Excel extends Suporte {
 			if (coluna.equalsIgnoreCase(colunasXML.getContents()))
 				return sheet.getCell(i, linhaAtual).getContents();
 		}
-		logger.error("A coluna \"" + coluna + "\" não exite no arquivo excel!");
+		System.out.println("A coluna \"" + coluna + "\" não exite no arquivo excel!");
 		return null;
 	}
 
@@ -118,8 +118,7 @@ public class Excel extends Suporte {
 				out.close();
 			}
 		} catch (Exception e) {
-			logger.info("Não conseguiu atualizar a planilha excel");
-			logger.error(e.fillInStackTrace());
+			System.out.println(e.fillInStackTrace());
 		}
 	}
 	
@@ -139,6 +138,10 @@ public class Excel extends Suporte {
 		return linhaAtual;
 	}
 
+    public void proximaLinha(Map<String, Excel> planilha, String aba) {
+    	planilha.get( aba ).setLinhaAtual(planilha.get( aba ).getLinhaAtual() + 1);
+	}
+    
 	public boolean existeColuna(String coluna) {
 		for (int i = 0; i < colunas; i++) {
 			Cell colunasXML = sheet.getCell(i, 0);
@@ -146,10 +149,6 @@ public class Excel extends Suporte {
 				return true;
 		}
 		return false;
-	}
-	
-    public void proximaLinha(Map<String, Excel> planilha, String aba) {
-    	planilha.get( aba ).setLinhaAtual(planilha.get( aba ).getLinhaAtual() + 1);
 	}
 	
 	// Carrega massa de dados a partir da planilha excel
