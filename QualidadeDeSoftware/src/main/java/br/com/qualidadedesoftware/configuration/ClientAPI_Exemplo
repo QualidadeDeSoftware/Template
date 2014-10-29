@@ -1,0 +1,96 @@
+package br.com.walmart.configuracao;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.core.MediaType;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.representation.Form;
+import com.sun.jersey.client.urlconnection.HTTPSProperties;
+
+public class ClientAPI_Exemplo {
+	Client client;
+	WebResource webResource;
+	Form body = new Form();
+	
+	public static void main(String[] args) {
+		new ClientAPI_Exemplo().autenticarUsuarioPost("<sua URL>", "<seu e-mail>", "<sua senha>");
+		
+		new ClientAPI_Exemplo().autenticarUsuarioGet("<sua URL>", "token");
+	}
+	
+	public String autenticarUsuarioPost(String URL, String email, String senha)  {
+		body.add("login", email);
+		body.add("password", senha);
+		return post(URL, body);
+	}
+	
+	public String autenticarUsuarioGet(String URL, String token)  {
+		return get(URL, token);
+	}
+	
+	public String post(String URL, Object body)  {
+		definirRequest(URL);
+		return webResource
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+				.post(ClientResponse.class, body)
+				.getEntity(String.class);
+	}
+	
+	public String get(String URL, Object token)  {
+		definirRequest(URL);
+		return webResource
+				.header("token", token)
+				.get(ClientResponse.class)
+				.getEntity(String.class);
+	}
+	
+	private void definirRequest(String URL)  {
+		try {
+			ClientConfig config = new DefaultClientConfig();
+			SSLContext ctx = SSLContext.getInstance("SSL");
+			ctx.init(null, getTrustManager(), new java.security.SecureRandom());
+			if (URL.contains("https://")) {
+				config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new HTTPSProperties(getHostnameVerifier(), ctx));
+			} else {
+				config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES, new HTTPSProperties(getHostnameVerifier()));
+			}
+					   
+			client = Client.create(config);
+			webResource = client.resource(URL);
+		} catch (Exception e) {}
+	}
+	
+	private TrustManager[] getTrustManager() {
+        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+
+            public void checkClientTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+            }
+
+            public void checkServerTrusted(
+                    java.security.cert.X509Certificate[] certs, String authType) {
+            }
+        } };
+
+        return trustAllCerts;
+    }
+	
+	private HostnameVerifier getHostnameVerifier() {
+	    return new HostnameVerifier() {
+	        @Override
+	        public boolean verify(String hostname, javax.net.ssl.SSLSession sslSession) {
+	            return true;
+	        }
+	    };
+	}
+}
