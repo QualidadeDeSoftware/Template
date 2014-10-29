@@ -1,4 +1,4 @@
-package br.com.walmart.configuracao;
+package br.com.qualidadedesoftware.configuracao;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
